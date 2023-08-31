@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flask-backend-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/SHARJEEL-482/automate_ci-cd.git
+    path: infra/flask-backend
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

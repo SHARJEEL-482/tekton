@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-app-deployment
+  namespace: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: react-app
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minikube-m03
+      containers:
+        - name: react-app-container
+          image: hamzaarshad10/frontend:latest
+          ports:
+            - containerPort: 3000 
+      serviceAccountName: frontend-service
+      #serviceAccountName: cluster-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-app-service
+  namespace: frontend
+spec:
+  selector:
+    app: react-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000  # Change this to the desired container port
+      # Change this to the desired NodePort
+  type: NodePort
